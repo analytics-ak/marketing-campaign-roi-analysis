@@ -4,7 +4,7 @@
 
 **Python | MySQL | Pandas | Matplotlib | Seaborn | Excel**
 
-Looked at 2,205 customers across 6 marketing campaigns to figure out who actually responds, which campaigns are worth repeating, and where the company is wasting money on people who never convert.
+Looked at 2,205 customers across 6 marketing campaigns to figure out who actually responds, which campaigns are worth repeating, and where the company is repeatedly targeting customers who never respond.
 
 The whole point is to end up with one targeting decision table that tells a marketing team exactly who to go after, who to skip, and which campaign to use.
 
@@ -25,7 +25,7 @@ The whole point is to end up with one targeting decision table that tells a mark
 
 ## Problem Statement
 
-Most marketing campaigns go out to everyone. Some people respond, most don't. But nobody goes back and asks — who exactly responded? What do they look like? And how much money did we waste on people who were never going to respond?
+Most marketing campaigns go out to everyone. Some people respond; most don't. But nobody goes back and asks — who exactly responded? What do they look like? And how much money did we waste on people who were never going to respond?
 
 This project answers one question:
 
@@ -64,7 +64,7 @@ Each row is one customer with income, age, what they spend on across 6 product c
 
 ## Key Findings
 
-### 1. Income is the Strongest Targeting Signal
+### 1. Income appears to be the strongest targeting signal in this dataset
 
 High-income customers respond 3x more than low-income ones. Age barely moves the needle.
 
@@ -107,7 +107,7 @@ Last Campaign pulled in 15.1% response rate — double the average. Campaign 2 b
 | Campaign 1 | 6.44% | -1.1 |
 | Campaign 2 | 1.36% | -6.1 |
 
-The gap between best and worst is almost 14 percentage points. If budget is limited, scale Last Campaign and stop running Campaign 2.
+The gap between best and worst is almost 14 percentage points. If the budget is limited, scale Last Campaign and Campaign 2 show very low response and may not be worth scaling further.
 
 ---
 
@@ -158,13 +158,13 @@ One thing stands out — non-responders actually visit the website more often (5
 
 501 customers who spend above average ($1,032), earn $68K, but never responded to a single campaign. That's 31% of all non-responders.
 
-These people are spending money — the campaigns just aren't reaching them the right way. This is a targeting failure, not a customer problem.
+These people are spending money — the campaigns just aren't reaching them the right way. This suggests a targeting gap rather than a lack of customer value.
 
 ---
 
 ## The Targeting Decision Table
 
-Every segment classified as Target, Test, or Avoid based on thresholds pulled from the data distribution (Target > 34%, Avoid < 23%, Test in between).
+Every segment is classified as Target, Test, or Avoid based on thresholds pulled from the data distribution (Target > 34%, Avoid < 23%, Test in between).
 
 | Income | Age | Customers | Response % | Avg Spend | Best Campaign | Action |
 |--------|-----|-----------|------------|-----------|---------------|--------|
@@ -191,20 +191,20 @@ All three high-income segments respond at 43-51%. Last Campaign is the best perf
 Low-income customers respond at 9-17% regardless of age. 72.6% of campaign attempts currently go to people who never respond. Cutting spend on low-response segments frees up budget for the ones that work.
 
 **3. Test mid-income seniors separately**
-Mid-income seniors respond at 25% — borderline. They're worth a small test with Last Campaign before committing full budget. Don't group them with other mid-income segments that sit at 18-22%.
+Mid-income seniors respond at 25% — borderline. They're worth a small test with Last Campaign before committing the full budget. Don't group them with other mid-income segments that sit at 18-22%.
 
-**4. Prioritize recent customers**
+**4. Prioritise recent customers**
 Customers who purchased in the last 30 days respond at 34.4% — 12 points higher than those at 90+ days. Add recency as a secondary filter on top of income-based targeting.
 
 ---
 
 ## Conclusion
 
-The targeting answer is simple — go after high-income customers using Last Campaign. They respond at 43-51% while low-income segments sit at 9-17%. Right now 72.6% of campaign attempts are going to people who never respond. That's the biggest waste in the data.
+The targeting answer is simple — go after high-income customers using Last Campaign. They respond at 43-51% while low-income segments sit at 9-17%. Right now, 72.6% of campaign attempts are going to people who never respond. That is the largest inefficiency visible in the data.
 
 Add recency as a filter. Customers who bought in the last 30 days respond at 34%, nearly double the 90+ day group.
 
-One table, one rule — high income + recent purchase + Last Campaign. That's where the return is.
+Simple rule: high income + recent purchase + Last Campaign. That's where the return is.
 
 ---
 
@@ -237,7 +237,6 @@ One table, one rule — high income + recent purchase + Last Campaign. That's wh
 marketing-campaign-roi-analysis/
 │
 ├── marketing_campaign_analysis.ipynb     # Full analysis notebook
-├── ifood_df.csv                          # Dataset
 ├── targeting_recommendations.xlsx        # Excel deliverable (3 sheets + chart)
 ├── README.md
 │
