@@ -6,7 +6,7 @@
 
 Looked at 2,205 customers across 6 marketing campaigns to figure out who actually responds, which campaigns are worth repeating, and where the company is wasting money on people who never convert.
 
-The whole point — end up with one targeting decision table that tells a marketing team exactly who to go after, who to skip, and which campaign to use.
+The whole point is to end up with one targeting decision table that tells a marketing team exactly who to go after, who to skip, and which campaign to use.
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?logo=mysql&logoColor=white)
@@ -96,7 +96,7 @@ The Young + High Income segment has the highest response rate at 50.7%, but only
 
 Last Campaign pulled in 15.1% response rate — double the average. Campaign 2 barely got anyone to respond.
 
-![Campaign Effectiveness](campaign_effectiveness.png)
+![Campaign Effectiveness](images/campaign_effectiveness.png)
 
 | Campaign | Response Rate | Lift vs Average |
 |----------|---------------|------------------|
@@ -115,15 +115,15 @@ The gap between best and worst is almost 14 percentage points. If budget is limi
 
 1,601 customers — 72.6% of the entire base — never responded to any of the 6 campaigns. That's 9,606 out of 13,230 total campaign attempts going to people who don't convert.
 
-These aren't all worthless customers either. Their average income is $47.8K and average spend is $422. They're buying — just not through campaigns.
+These aren't all worthless customers either. Their average income is $47.8K, and their average spend is $422. They're buying — just not through campaigns.
 
 ---
 
 ### 4. Recency is a Useful Filter
 
-Customers who purchased recently respond more. The pattern is consistent — as recency goes up, response rate drops.
+Customers who have purchased recently respond more. The pattern is consistent — as recency goes up, response rate drops.
 
-![Recency vs Response](recency_vs_response.png)
+![Recency vs Response](images/recency_vs_response.png)
 
 | Recency | Customers | Response Rate |
 |---------|-----------|---------------|
@@ -132,13 +132,13 @@ Customers who purchased recently respond more. The pattern is consistent — as 
 | 61-90 days | 653 | 23.43% |
 | 90+ days | 193 | 22.28% |
 
-Actionable cutoff — prioritize customers with recency under 60 days. They respond at 25-34%, well above the 22-23% rate for older customers.
+Actionable cutoff — prioritise customers with recency under 60 days. They respond at 25-34%, well above the 22-23% rate for older customers.
 
 ---
 
 ### 5. Responders Buy Differently
 
-Responders spend more than double what non-responders spend ($937 vs $422) and earn 30% more ($62K vs $48K). They also use catalog purchases at 2x the rate of non-responders.
+Responders spend more than double what non-responders spend ($937 vs $422) and earn 30% more ($62K vs $48K). They also use catalogue purchases at 2x the rate of non-responders.
 
 | Metric | Responders | Non-Responders |
 |--------|------------|----------------|
@@ -210,11 +210,11 @@ One table, one rule — high income + recent purchase + Last Campaign. That's wh
 
 ## Limitations
 
-- **2,205 customers is small.** These patterns should be validated on larger data before making major budget decisions.
-- **Response is not purchase.** A customer accepting a campaign doesn't mean they bought something. No revenue data is available to confirm actual ROI.
-- **No campaign content or timing data.** We know which campaigns worked but not why — the creative, the offer, the timing are all unknown.
+- **2,205 customers are small.** These patterns should be validated on larger data before making major budget decisions.
+- **Response is not a purchase.** A customer accepting a campaign doesn't mean they bought something. No revenue data is available to confirm actual ROI.
+- **No campaign content or timing data.** We know which campaigns worked, but not why — the creative, the offer, and the timing are all unknown.
 - **No control group.** We can't measure true campaign lift because there's no group that wasn't targeted at all.
-- **Single time snapshot.** No way to track if response behavior changes over time or across seasons.
+- **Single time snapshot.** No way to track if response behaviour changes over time or across seasons.
 
 ---
 
