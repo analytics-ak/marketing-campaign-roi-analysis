@@ -23,21 +23,21 @@ The whole point is to end up with one targeting decision table that tells a mark
 
 ---
 
-## Problem Statement
+## The Short Version
 
-Most marketing campaigns go out to everyone. Some people respond; most don't. But nobody goes back and asks — who exactly responded? What do they look like? And how much money did we waste on people who were never going to respond?
+2,205 customers. 6 campaigns. 13,230 total campaign attempts.
 
-This project answers one question:
+**9,606 of those attempts — 72.6% — went to customers who never responded to a single campaign.**
 
-**Which customers should we target, and which campaigns are actually worth repeating?**
+The budget is not the problem. The targeting is. This analysis finds exactly which customers respond, which campaigns work, and builds a decision table a marketing team can use the same day.
 
 ---
 
-## Why This Matters
+## The Core Problem
 
-- Stops wasting campaign budget on customers who never respond
-- Tells the team exactly which segments to focus on and which to drop
-- Turns raw customer data into a decision a marketing manager can use today
+Most marketing campaigns go out to everyone. Some people respond. Most do not. But nobody goes back and asks — who exactly responded? What do they look like? And how much budget was wasted on people who were never going to convert?
+
+Right now 72.6% of campaign spend is going to non-responders. Within that group, 501 customers spend above average ($1,032 avg) and earn $68K — they are valuable customers, just not reachable through current targeting. That is a targeting gap, not a customer quality problem.
 
 ---
 
@@ -51,123 +51,12 @@ MySQL does the heavy lifting on numbers. Python digs deeper into patterns. Excel
 
 ---
 
-## The Dataset
-
-- **Source:** [Kaggle — Marketing Campaign Results](https://www.kaggle.com/datasets/jackdaoud/marketing-data)
-- **Rows:** 2,205 customers
-- **Columns:** 39 (demographics, spending, campaign responses, purchase channels)
-- **Note:** Small dataset — any conclusions here should be validated on larger data before making big budget moves
-
-Each row is one customer with income, age, what they spend on across 6 product categories, how they responded to 6 different campaigns, and which channels they buy through.
-
----
-
-## Key Findings
-
-### 1. Income appears to be the strongest targeting signal in this dataset
-
-High-income customers respond 3x more than low-income ones. Age barely moves the needle.
-
-| Income Group | Customers | Response Rate |
-|--------------|-----------|---------------|
-| High (>65K)  | 667       | **44.68%** |
-| Mid (35-65K) | 989       | 23.05% |
-| Low (<35K)   | 549       | 14.21% |
-
-Breaking it down further by age shows that within each income group, age has a small effect — but income is what really matters.
-
-| Segment | Customers | Response Rate |
-|---------|-----------|---------------|
-| Young + High Income | 73 | **50.68%** |
-| Senior + High Income | 276 | 44.93% |
-| Middle + High Income | 318 | 43.08% |
-| Senior + Mid Income | 393 | 24.94% |
-| Middle + Mid Income | 552 | 22.10% |
-| Young + Mid Income | 44 | 18.18% |
-| Middle + Low Income | 345 | 16.52% |
-| Young + Low Income | 102 | 11.76% |
-| Senior + Low Income | 102 | 8.82% |
-
-The Young + High Income segment has the highest response rate at 50.7%, but only 73 customers — small sample. The other two high-income segments (276 and 318 customers) are more reliable.
-
----
-
-### 2. One Campaign Crushed Everything, One Was Basically Dead
-
-Last Campaign pulled in 15.1% response rate — double the average. Campaign 2 barely got anyone to respond.
-
-![Campaign Effectiveness](images/campaign_effectiveness.png)
-
-| Campaign | Response Rate | Lift vs Average |
-|----------|---------------|------------------|
-| Last Campaign | **15.10%** | +7.6 |
-| Campaign 4 | 7.44% | -0.1 |
-| Campaign 3 | 7.39% | -0.1 |
-| Campaign 5 | 7.30% | -0.2 |
-| Campaign 1 | 6.44% | -1.1 |
-| Campaign 2 | 1.36% | -6.1 |
-
-The gap between best and worst is almost 14 percentage points. If the budget is limited, scale Last Campaign and Campaign 2 show very low response and may not be worth scaling further.
-
----
-
-### 3. 72.6% of Campaign Attempts Are Wasted
-
-1,601 customers — 72.6% of the entire base — never responded to any of the 6 campaigns. That's 9,606 out of 13,230 total campaign attempts going to people who don't convert.
-
-These aren't all worthless customers either. Their average income is $47.8K, and their average spend is $422. They're buying — just not through campaigns.
-
----
-
-### 4. Recency is a Useful Filter
-
-Customers who have purchased recently respond more. The pattern is consistent — as recency goes up, response rate drops.
-
-![Recency vs Response](images/recency_vs_response.png)
-
-| Recency | Customers | Response Rate |
-|---------|-----------|---------------|
-| 0-30 days | 686 | **34.40%** |
-| 31-60 days | 645 | 25.58% |
-| 61-90 days | 653 | 23.43% |
-| 90+ days | 193 | 22.28% |
-
-Actionable cutoff — prioritise customers with recency under 60 days. They respond at 25-34%, well above the 22-23% rate for older customers.
-
----
-
-### 5. Responders Buy Differently
-
-Responders spend more than double what non-responders spend ($937 vs $422) and earn 30% more ($62K vs $48K). They also use catalogue purchases at 2x the rate of non-responders.
-
-| Metric | Responders | Non-Responders |
-|--------|------------|----------------|
-| Avg Income | $61,719 | $47,813 |
-| Avg Total Spend | $937 | $422 |
-| Avg Catalog Purchases | 4.13 | 2.08 |
-| Avg Web Purchases | 5.08 | 3.73 |
-| Avg Store Purchases | 6.60 | 5.53 |
-| Avg Recency | 44 days | 51 days |
-| Avg Web Visits/Month | 5.06 | 5.44 |
-
-One thing stands out — non-responders actually visit the website more often (5.44 vs 5.06). They browse but don't buy. Either the campaigns aren't reaching them through the right channel, or the offers don't match what they want.
-
----
-
-### 6. 501 High-Value Customers Are Being Ignored
-
-501 customers who spend above average ($1,032), earn $68K, but never responded to a single campaign. That's 31% of all non-responders.
-
-These people are spending money — the campaigns just aren't reaching them the right way. This suggests a targeting gap rather than a lack of customer value.
-
----
-
 ## The Targeting Decision Table
 
-Every segment is classified as Target, Test, or Avoid based on thresholds pulled from the data distribution (Target > 34%, Avoid < 23%, Test in between).
+This is the deliverable. Every segment classified as Target, Test, or Avoid based on response rate thresholds from the data.
 
 | Income | Age | Customers | Response % | Avg Spend | Best Campaign | Action |
-|--------|-----|-----------|------------|-----------|---------------|--------|
+|---|---|---|---|---|---|---|
 | High (>65K) | Young (<35) | 73 | 50.68% | $1,359 | Campaign 5 | **TARGET** |
 | High (>65K) | Senior (>55) | 276 | 44.93% | $1,192 | Last Campaign | **TARGET** |
 | High (>65K) | Middle (35-55) | 318 | 43.08% | $1,218 | Last Campaign | **TARGET** |
@@ -178,52 +67,142 @@ Every segment is classified as Target, Test, or Avoid based on thresholds pulled
 | Low (<35K) | Young (<35) | 102 | 11.76% | $53 | Campaign 3 | AVOID |
 | Low (<35K) | Senior (>55) | 102 | 8.82% | $77 | Last Campaign | AVOID |
 
-This is the deliverable. A marketing team can open this, sort it, and make decisions the same day.
+A marketing team can open this, sort it, and make decisions today.
+
+---
+
+## What the Data Shows
+
+### Income is the strongest targeting signal
+
+High-income customers respond 3x more than low-income ones. Age barely moves the needle within income groups.
+
+| Income Group | Customers | Response Rate |
+|---|---|---|
+| High (>65K) | 667 | **44.68%** |
+| Mid (35-65K) | 989 | 23.05% |
+| Low (<35K) | 549 | 14.21% |
+
+The Young + High Income segment has the highest response rate at 50.7% — but only 73 customers. The Senior and Middle High Income segments are more reliable at 276 and 318 customers, both responding above 43%.
+
+---
+
+### One campaign crushed everything. One was basically dead.
+
+Last Campaign pulled 15.1% response rate — double the average. Campaign 2 barely got anyone.
+
+![Campaign Effectiveness](images/campaign_effectiveness.png)
+
+| Campaign | Response Rate | Lift vs Average |
+|---|---|---|
+| Last Campaign | **15.10%** | +7.6 |
+| Campaign 4 | 7.44% | -0.1 |
+| Campaign 3 | 7.39% | -0.1 |
+| Campaign 5 | 7.30% | -0.2 |
+| Campaign 1 | 6.44% | -1.1 |
+| Campaign 2 | 1.36% | -6.1 |
+
+14 percentage points separate best from worst. Scale Last Campaign. Cut Campaign 2.
+
+---
+
+### 72.6% of campaign attempts are wasted
+
+1,601 customers never responded to any of the 6 campaigns. Their average income is $47.8K and average spend is $422. They are buying — just not through campaigns. Either wrong channel or wrong offer.
+
+---
+
+### Recency is a reliable secondary filter
+
+![Recency vs Response](images/recency_vs_response.png)
+
+| Recency | Customers | Response Rate |
+|---|---|---|
+| 0–30 days | 686 | **34.40%** |
+| 31–60 days | 645 | 25.58% |
+| 61–90 days | 653 | 23.43% |
+| 90+ days | 193 | 22.28% |
+
+Practical cutoff — prioritise customers with recency under 60 days. Response rate drops sharply after that window.
+
+---
+
+### Responders look completely different from non-responders
+
+| Metric | Responders | Non-Responders |
+|---|---|---|
+| Avg Income | $61,719 | $47,813 |
+| Avg Total Spend | $937 | $422 |
+| Avg Catalog Purchases | 4.13 | 2.08 |
+| Avg Web Purchases | 5.08 | 3.73 |
+| Avg Store Purchases | 6.60 | 5.53 |
+| Avg Recency | 44 days | 51 days |
+| Avg Web Visits/Month | 5.06 | **5.44** |
+
+One thing stands out — non-responders visit the website more often. They browse but do not buy. Either the campaigns are not reaching them through the right channel, or the offers do not match what they want.
+
+---
+
+### 501 high-value customers are being missed
+
+501 customers spend above average ($1,032), earn $68K, but never responded to a single campaign. That is 31% of all non-responders — valuable customers the current targeting is failing to reach.
 
 ---
 
 ## Recommendations
 
 **1. Target high-income customers with Last Campaign**
-All three high-income segments respond at 43-51%. Last Campaign is the best performer at 15.1%. Focus budget here — this is where the return is.
+All three high-income segments respond at 43–51%. Last Campaign performs at 15.1% — double the average. Concentrate budget here first.
 
-**2. Stop wasting on low-income segments**
-Low-income customers respond at 9-17% regardless of age. 72.6% of campaign attempts currently go to people who never respond. Cutting spend on low-response segments frees up budget for the ones that work.
+**2. Cut low-income segments from active targeting**
+Low-income customers respond at 9–17% regardless of age. Cutting spend here frees up budget for segments that actually convert.
 
 **3. Test mid-income seniors separately**
-Mid-income seniors respond at 25% — borderline. They're worth a small test with Last Campaign before committing the full budget. Don't group them with other mid-income segments that sit at 18-22%.
+Mid-income seniors respond at 25% — borderline. Worth a small test with Last Campaign before committing full budget. Do not group them with other mid-income segments at 18–22%.
 
-**4. Prioritise recent customers**
-Customers who purchased in the last 30 days respond at 34.4% — 12 points higher than those at 90+ days. Add recency as a secondary filter on top of income-based targeting.
+**4. Add recency as a secondary filter**
+Customers who purchased in the last 30 days respond at 34.4% — 12 points above the 90+ day group. Layer recency on top of income targeting for highest precision.
+
+**Simple rule: high income + recent purchase + Last Campaign. That is where the return is.**
 
 ---
 
 ## Conclusion
 
-The targeting answer is simple — go after high-income customers using Last Campaign. They respond at 43-51% while low-income segments sit at 9-17%. Right now, 72.6% of campaign attempts are going to people who never respond. That is the largest inefficiency visible in the data.
+72.6% of campaign attempts are going to customers who never respond. That is the problem in one number.
 
-Add recency as a filter. Customers who bought in the last 30 days respond at 34%, nearly double the 90+ day group.
+The fix is not a new campaign. It is better targeting. High-income customers respond at 43–51%. Low-income customers respond at 9–17%. The gap is large and consistent across every age group.
 
-Simple rule: high income + recent purchase + Last Campaign. That's where the return is.
+Redirect budget from low-response segments to high-income recent buyers using Last Campaign — and the same spend produces significantly more conversions without acquiring a single new customer.
+
+This analysis shows that in marketing, who you target matters more than what you say.
 
 ---
 
 ## Limitations
 
-- **2,205 customers are small.** These patterns should be validated on larger data before making major budget decisions.
-- **Response is not a purchase.** A customer accepting a campaign doesn't mean they bought something. No revenue data is available to confirm actual ROI.
-- **No campaign content or timing data.** We know which campaigns worked, but not why — the creative, the offer, and the timing are all unknown.
-- **No control group.** We can't measure true campaign lift because there's no group that wasn't targeted at all.
-- **Single time snapshot.** No way to track if response behaviour changes over time or across seasons.
+- 2,205 customers is a small dataset. Patterns should be validated on larger data before major budget decisions.
+- Response is not a purchase. No revenue data is available to calculate actual ROI.
+- No campaign content or timing data. We know which campaigns worked but not why.
+- No control group. True campaign lift cannot be measured without a group that was not targeted.
+- Single time snapshot — no seasonal trend analysis possible.
 
 ---
 
-## Tools & Libraries
+## Dataset
+
+- **Source:** [Kaggle — Marketing Campaign Results](https://www.kaggle.com/datasets/jackdaoud/marketing-data)
+- **Rows:** 2,205 customers
+- **Columns:** 39 (demographics, spending, campaign responses, purchase channels)
+
+---
+
+## Tools Used
 
 | Tool | Used For |
-|------|----------|
+|---|---|
 | Python | Data cleaning, feature engineering, analysis |
-| MySQL | Database queries — segmentation, response rates, aggregation |
+| MySQL | Segmentation, response rates, aggregation |
 | Pandas | Data manipulation and grouping |
 | Matplotlib & Seaborn | Charts and visualizations |
 | openpyxl | Excel export with formatting and embedded charts |
@@ -236,12 +215,12 @@ Simple rule: high income + recent purchase + Last Campaign. That's where the ret
 ```
 marketing-campaign-roi-analysis/
 │
-├── marketing_campaign_analysis.ipynb     # Full analysis notebook
-├── targeting_recommendations.xlsx        # Excel deliverable (3 sheets + chart)
-├── README.md
+├── marketing_campaign_analysis.ipynb  ← Full analysis notebook
+├── targeting_recommendations.xlsx     ← Excel deliverable (3 sheets + chart)
+├── README.md                          ← You are reading this
 │
 ├── sql/
-│   └── queries.sql                        # All SQL queries standalone
+│   └── queries.sql                    ← All SQL queries standalone
 │
 └── images/
     ├── campaign_effectiveness.png
@@ -250,44 +229,27 @@ marketing-campaign-roi-analysis/
 
 ---
 
-## How to Run This Project
+## How to Run This
 
 1. Clone this repo
    ```bash
    git clone https://github.com/analytics-ak/marketing-campaign-roi-analysis.git
    ```
-
-2. Install the required libraries
+2. Install required libraries
    ```bash
    pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy openpyxl
    ```
-
-3. Set up MySQL
-   - Make sure MySQL is running locally
-   - Update the connection credentials in the notebook (host, user, password)
-
+3. Set up MySQL — make sure it is running and update connection credentials in the notebook
 4. Open the notebook
    ```bash
    jupyter notebook marketing_campaign_analysis.ipynb
    ```
-
-5. Run all cells — charts will generate, data will load into MySQL, and the Excel file will be exported automatically
+5. Run all cells — charts generate, data loads into MySQL, Excel file exports automatically
 
 ---
-
-## Profile & Dataset
-
-* 🔗 **LinkedIn:** [View My Profile](https://www.linkedin.com/in/analytics-ashish/)
-* 📂 **Dataset:** [Marketing Campaign Results on Kaggle](https://www.kaggle.com/datasets/jackdaoud/marketing-data)
-* 💻 **GitHub Repository:** [Marketing Campaign ROI Analysis](https://github.com/analytics-ak/marketing-campaign-roi-analysis)
-* 📘 **Notebook:** [marketing_campaign_analysis.ipynb](https://github.com/analytics-ak/marketing-campaign-roi-analysis/blob/main/marketing_campaign_analysis.ipynb)
-
-<br>
 
 ## Author
 
 **Ashish Kumar Dongre**
-Data Analyst
 
-- Python | SQL | Data Analysis | Excel
-- Focus: **Business-driven data insights**
+🔗 [LinkedIn](https://www.linkedin.com/in/analytics-ashish/) &nbsp;|&nbsp; 💻 [GitHub](https://github.com/analytics-ak/marketing-campaign-roi-analysis) &nbsp;|&nbsp; 📂 [Dataset on Kaggle](https://www.kaggle.com/datasets/jackdaoud/marketing-data)
